@@ -26,11 +26,17 @@ type Instance struct {
  */
 var URI string = os.Getenv("MONGO_URL")
 var DBName string = os.Getenv("MONGO_DB")
+var Port string = os.Getenv("PORT")
 
 func main() {
 	if URI == "" {
 		fmt.Println("no connection string provided, using localhost")
 		URI = "localhost"
+	}
+
+	if Port == "" {
+		fmt.Println("no port name provided, using 3000")
+		Port = "3000"
 	}
 
 	if DBName == "" {
@@ -49,7 +55,7 @@ func main() {
 	 */
 	http.HandleFunc("/", root)
 	log.Println("Listening for connections...")
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(http.ListenAndServe(":"+Port, nil))
 }
 
 func root(w http.ResponseWriter, r *http.Request) {
@@ -173,7 +179,6 @@ func root(w http.ResponseWriter, r *http.Request) {
  */
 func Responder(w http.ResponseWriter, r *http.Request, status int, message string) {
 	w.WriteHeader(status)
-	log.Println(message)
 	fmt.Fprint(w, message)
 }
 
